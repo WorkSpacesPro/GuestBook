@@ -11,9 +11,9 @@ const translations = {
         nav_explore: "Explore",
         nav_guestbook: "Guestbook",
         nav_about: "About",
-        title: "Floating Guestbook",
+        title: "Guestbook",
         subtitle: "Leave your footprint · Powered by GitHub Discussions",
-        copyright: "© 2025 Floating Guestbook"
+        copyright: "© 2025 Guestbook"
     },
     zh: {
         site_name: "留言本",
@@ -23,7 +23,7 @@ const translations = {
         nav_about: "关于",
         title: "浮光留言本",
         subtitle: "留下足迹 · 基于 GitHub 讨论",
-        copyright: "© 2025 浮光留言本"
+        copyright: "© 2025 留言本"
     }
 };
 
