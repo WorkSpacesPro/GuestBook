@@ -6,7 +6,7 @@
     <title>GB.OoO · 浮光留言本 · Floating</title>
     <!-- 外部 CSS -->
     <link rel="stylesheet" href="assets/css/style.css">
-    <!-- Font Awesome 6 图标库 (可替换为本地资源) -->
+    <!-- Font Awesome 6 图标库 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
@@ -21,27 +21,24 @@
     <!-- 导航栏 -->
     <div class="navbar">
         <div class="nav-container">
-            <!-- 左侧：移动端显示切换按钮组 (桌面端隐藏) -->
-            <div class="mobile-actions" id="mobileActions">
-                <button id="mobileDarkToggle" class="icon-btn" aria-label="Dark mode toggle"><i class="fas fa-moon"></i></button>
-                <button id="mobileLangToggle" class="icon-btn" aria-label="Language toggle"><i class="fas fa-globe"></i></button>
-            </div>
-
             <!-- Logo 区域 -->
             <div class="logo-area">
                 <i class="fas fa-feather-alt"></i>
                 <span data-i18n="site_name">Guestbook</span>
             </div>
 
-            <!-- 右侧导航链接 (包含两个切换按钮的桌面版，移动端会隐藏) -->
+            <!-- 右侧导航链接（包含桌面端和移动端切换按钮） -->
             <ul class="nav-links">
                 <li><a href="#" data-i18n="nav_home"><i class="fas fa-home"></i> Home</a></li>
                 <li><a href="#" data-i18n="nav_explore"><i class="fas fa-compass"></i> Explore</a></li>
                 <li><a href="#" data-i18n="nav_guestbook" style="border-bottom-color:var(--link-hover);"><i class="fas fa-book-open"></i> Guestbook</a></li>
                 <li><a href="#" data-i18n="nav_about"><i class="fas fa-user"></i> About</a></li>
-                <!-- 桌面版切换按钮 (移动端会隐藏) -->
+                <!-- 桌面版切换按钮（移动端隐藏） -->
                 <li class="desktop-only"><button id="darkModeToggle" class="icon-btn"><i class="fas fa-moon"></i></button></li>
                 <li class="desktop-only"><button id="langToggle" class="icon-btn"><i class="fas fa-globe"></i></button></li>
+                <!-- 移动版切换按钮（桌面端隐藏，移动端显示并位于最右侧） -->
+                <li class="mobile-only"><button id="mobileDarkToggle" class="icon-btn"><i class="fas fa-moon"></i></button></li>
+                <li class="mobile-only"><button id="mobileLangToggle" class="icon-btn"><i class="fas fa-globe"></i></button></li>
             </ul>
         </div>
     </div>
@@ -57,10 +54,10 @@
         </div>
     </div>
 
-    <!-- 页脚 (邮箱修改) -->
+    <!-- 页脚 -->
     <div class="footer">
         <div class="footer-content">
-            <span data-i18n="copyright">© 2025  Guestbook</span>
+            <span data-i18n="copyright">© 2025 Guestbook</span>
             <span class="email-link">
                 <i class="fas fa-envelope"></i>
                 <a href="mailto:hello@domainname.plus">Hello#DomainName.Plus</a>
