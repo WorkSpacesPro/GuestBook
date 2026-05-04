@@ -11,7 +11,7 @@
 </head>
 <body>
 <div class="page-wrapper">
-    <!-- 动态圆形背景 (纯CSS动画) -->
+    <!-- 动态圆形背景 -->
     <ul class="circles">
         <li></li><li></li><li></li><li></li><li></li>
         <li></li><li></li><li></li><li></li><li></li>
@@ -21,22 +21,19 @@
     <!-- 导航栏 -->
     <div class="navbar">
         <div class="nav-container">
-            <!-- Logo 区域 -->
             <div class="logo-area">
                 <i class="fas fa-feather-alt"></i>
                 <span data-i18n="site_name">Guestbook</span>
             </div>
-
-            <!-- 右侧导航链接（包含桌面端和移动端切换按钮） -->
             <ul class="nav-links">
                 <li><a href="#" data-i18n="nav_home"><i class="fas fa-home"></i> Home</a></li>
                 <li><a href="#" data-i18n="nav_explore"><i class="fas fa-compass"></i> Explore</a></li>
                 <li><a href="#" data-i18n="nav_guestbook" style="border-bottom-color:var(--link-hover);"><i class="fas fa-book-open"></i> Guestbook</a></li>
                 <li><a href="#" data-i18n="nav_about"><i class="fas fa-user"></i> About</a></li>
-                <!-- 桌面版切换按钮（移动端隐藏） -->
+                <!-- 桌面版切换按钮 -->
                 <li class="desktop-only"><button id="darkModeToggle" class="icon-btn"><i class="fas fa-moon"></i></button></li>
                 <li class="desktop-only"><button id="langToggle" class="icon-btn"><i class="fas fa-globe"></i></button></li>
-                <!-- 移动版切换按钮（桌面端隐藏，移动端显示并位于最右侧） -->
+                <!-- 移动版切换按钮 -->
                 <li class="mobile-only"><button id="mobileDarkToggle" class="icon-btn"><i class="fas fa-moon"></i></button></li>
                 <li class="mobile-only"><button id="mobileLangToggle" class="icon-btn"><i class="fas fa-globe"></i></button></li>
             </ul>
@@ -67,7 +64,6 @@
     </div>
 </div>
 
-<!-- 外部 JavaScript -->
 <script src="assets/js/main.js"></script>
 </body>
 </html>
