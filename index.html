@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +7,8 @@
     <style>
         /* ----------------------------------------------------------
            GLOBAL VARIABLES & DARK MODE
-           ---------------------------------------------------------- */
+           全局变量与深色模式定义
+        ---------------------------------------------------------- */
         :root {
             /* 亮色主题变量 */
             --bg-gradient-start: #f4f7ff;
@@ -57,7 +57,7 @@
             transition: var(--transition);
         }
 
-        /* ========= 动态圆形背景 (完全复刻 whoisw.com 动画) ========= */
+        /* ========= 动态圆形背景 (复刻 whoisw.com 动画) ========= */
         .circles {
             position: fixed;
             top: 0;
@@ -133,7 +133,7 @@
             }
         }
 
-        /* ========= 导航栏 (毛玻璃效果，无品牌信息) ========= */
+        /* ========= 导航栏 (毛玻璃效果) ========= */
         .navbar {
             position: fixed;
             top: 0;
@@ -199,13 +199,16 @@
             font-size: 1rem;
             padding: 0.3rem 0;
             border-bottom: 2px solid transparent;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
         .nav-links a:hover {
             color: var(--link-hover);
             border-bottom-color: var(--link-hover);
         }
 
-        /* 图标按钮通用样式 (深色/语言切换) */
+        /* 图标按钮通用样式 (深色/语言切换) 只显示图标无文字 */
         .icon-btn {
             background: none;
             border: none;
@@ -323,30 +326,42 @@
             gap: 0.3rem;
         }
 
-        /* 响应式 */
+        /* ----------------------------------------------------------
+           响应式布局：移动端优化
+           1. 导航栏变窄（padding减小）
+           2. 导航链接隐藏文字，只显示图标
+           3. 页脚内边距减小
+        ---------------------------------------------------------- */
         @media (max-width: 720px) {
             .navbar {
-                padding: 0.6rem 1rem;
-            }
-            .nav-links {
-                gap: 1rem;
+                padding: 0.4rem 1rem;   /* 顶部导航栏更窄 */
             }
             .logo-area {
-                font-size: 1.2rem;
+                font-size: 1.2rem;       /* Logo 字体缩小 */
             }
-            .main-content {
-                margin-top: 5rem;
-                padding: 0 1rem;
+            .logo-area i {
+                font-size: 1.3rem;
             }
-            .guestbook-card {
-                padding: 1.5rem;
+            /* 隐藏导航链接中的文字部分，仅保留图标 */
+            .nav-links a {
+                font-size: 0;            /* 隐藏文字 */
+                gap: 0;
             }
-            .guestbook-header h1 {
-                font-size: 1.8rem;
+            .nav-links a i {
+                font-size: 1.2rem;       /* 图标正常显示 */
+                margin: 0;
+            }
+            /* 调整导航链接之间的间距，更紧凑 */
+            .nav-links {
+                gap: 0.8rem;
+            }
+            /* 页脚更窄，内边距减小 */
+            .footer {
+                padding: 0.8rem 1rem;
             }
             .footer-content {
-                flex-direction: column;
-                gap: 0.5rem;
+                gap: 0.6rem;
+                font-size: 0.75rem;
             }
         }
     </style>
@@ -362,7 +377,7 @@
         <li></li><li></li><li></li><li></li>
     </ul>
 
-    <!-- 导航栏 (无品牌信息，只有通用名称) -->
+    <!-- 导航栏 -->
     <div class="navbar">
         <div class="nav-container">
             <div class="logo-area">
@@ -394,7 +409,7 @@
         </div>
     </div>
 
-    <!-- 页脚 (含版权与邮箱，无品牌指向) -->
+    <!-- 页脚 (含版权与邮箱) -->
     <div class="footer">
         <div class="footer-content">
             <span data-i18n="copyright">© 2025 Floating Guestbook</span>
@@ -444,18 +459,13 @@
         i18nElements.forEach(el => {
             const key = el.getAttribute('data-i18n');
             if (translations[lang] && translations[lang][key]) {
-                // 保留原有图标或子元素，只修改文本节点
-                // 如果元素内有图标或复杂结构，需谨慎；此处简单处理文本内容
-                // 避免覆盖图标，仅替换最后一个文本节点或直接设置innerText（但会保留i标签？）
-                // 更好的方法：遍历子节点，替换文本节点。但为了简洁，假设只有文字或简单嵌套。
-                // 这里使用 innerHTML 保留图标 (如果包含 <i> 则保留)
+                // 保留子元素（如图标），仅更新文本内容
+                // 如果包含 <i> 图标且后面有文本节点则替换文本节点
                 if (el.children.length > 0) {
-                    // 若有子节点如<i>，则只替换最后一个文本节点，大部分情况下是文字
                     let lastNode = el.lastChild;
                     if (lastNode && lastNode.nodeType === Node.TEXT_NODE) {
                         lastNode.textContent = translations[lang][key];
                     } else {
-                        // 若没有文本节点则追加
                         el.appendChild(document.createTextNode(translations[lang][key]));
                     }
                 } else {
@@ -468,7 +478,6 @@
     /* ---------------------------------------------------------------
        Giscus 加载与语言切换
        由于 Giscus 的 data-lang 属性不能动态修改，需要重新创建 script
-       函数 loadGiscus(lang) 根据当前语言重新加载评论组件，同时保留当前主题设置
     --------------------------------------------------------------- */
     let giscusLoaded = false;
     let giscusScriptElem = null;
@@ -476,17 +485,12 @@
     function loadGiscus(lang) {
         const container = document.getElementById('giscus-container');
         if (!container) return;
-        // 清空容器
         container.innerHTML = '';
         
-        // 确定 giscus 语言参数: 'zh-CN' 或 'en'
         const giscusLang = lang === 'zh' ? 'zh-CN' : 'en';
-        
-        // 根据当前主题决定 Giscus 主题 (深色/亮色)
         const isDark = document.body.classList.contains('dark');
         const giscusTheme = isDark ? 'dark_dimmed' : 'light_tritanopia';
         
-        // 创建 script 元素
         const script = document.createElement('script');
         script.src = 'https://giscus.app/client.js';
         script.setAttribute('data-repo', 'WorkSpacesPro/guestbook');
@@ -503,26 +507,19 @@
         script.setAttribute('crossorigin', 'anonymous');
         script.async = true;
         
-        script.onload = () => {
-            giscusLoaded = true;
-            // 如需要额外的主题同步，可在此处发送 postMessage，但已通过 data-theme 设置
-        };
         container.appendChild(script);
         giscusScriptElem = script;
     }
     
-    // 当深色模式切换时，更新 Giscus 主题 (无需重新加载整个组件，通过 postMessage)
+    // 当深色模式切换时，更新 Giscus 主题
     function updateGiscusTheme(isDark) {
         const themeToSet = isDark ? 'dark_dimmed' : 'light_tritanopia';
         const iframe = document.querySelector('iframe.giscus-frame');
         if (iframe && iframe.contentWindow) {
             iframe.contentWindow.postMessage({
-                giscus: {
-                    setConfig: { theme: themeToSet }
-                }
+                giscus: { setConfig: { theme: themeToSet } }
             }, 'https://giscus.app');
         } else {
-            // 如果 iframe 还未加载，则等待其出现
             const observer = new MutationObserver((mutations, obs) => {
                 const frame = document.querySelector('iframe.giscus-frame');
                 if (frame) {
@@ -540,7 +537,7 @@
     }
 
     /* ---------------------------------------------------------------
-       深色模式切换 (仅图标，无文字)
+       深色模式切换 (仅图标)
     --------------------------------------------------------------- */
     function initDarkMode() {
         const storedTheme = localStorage.getItem('theme');
@@ -556,18 +553,14 @@
         }
         updateDarkModeIcon(isDark);
         
-        // 如果 Giscus 已经加载，则通知更新主题
-        if (giscusLoaded || document.querySelector('iframe.giscus-frame')) {
+        if (document.querySelector('iframe.giscus-frame')) {
             updateGiscusTheme(isDark);
-        } else {
-            // 未加载则等下次加载时通过 data-theme 自动应用，但 loadGiscus 已经读取 body 状态
         }
     }
     
     function updateDarkModeIcon(isDark) {
         const toggleBtn = document.getElementById('darkModeToggle');
         if (!toggleBtn) return;
-        // 只保留图标，根据当前状态更换图标样式
         if (isDark) {
             toggleBtn.innerHTML = '<i class="fas fa-sun"></i>';
         } else {
@@ -593,33 +586,27 @@
     }
     
     /* ---------------------------------------------------------------
-       语言切换 (保留当前主题，重新加载 Giscus 并更新页面文本)
+       语言切换
     --------------------------------------------------------------- */
     function toggleLanguage() {
         const newLang = currentLang === 'en' ? 'zh' : 'en';
         currentLang = newLang;
-        // 更新页面静态文本
         updatePageText(currentLang);
-        // 重新加载 Giscus 组件 (保留新的语言参数)
         loadGiscus(currentLang);
-        // 保存语言偏好到 localStorage
         localStorage.setItem('lang', currentLang);
     }
     
-    // 初始化语言设置
     function initLanguage() {
         const savedLang = localStorage.getItem('lang');
         if (savedLang === 'zh' || savedLang === 'en') {
             currentLang = savedLang;
         } else {
-            currentLang = 'en';   // 默认英文
+            currentLang = 'en';
         }
         updatePageText(currentLang);
-        // 加载 Giscus (依赖当前语言)
         loadGiscus(currentLang);
     }
     
-    // 绑定按钮事件
     function bindEvents() {
         const darkBtn = document.getElementById('darkModeToggle');
         if (darkBtn) darkBtn.addEventListener('click', toggleDarkMode);
@@ -628,7 +615,6 @@
         if (langBtn) langBtn.addEventListener('click', toggleLanguage);
     }
     
-    // 页面启动
     function init() {
         initDarkMode();
         initLanguage();
