@@ -27,10 +27,9 @@ const translations = {
     }
 };
 
-let currentLang = 'en';      // 'en' 或 'zh'
-let currentTheme = 'light';   // 'light' 或 'dark'
+let currentLang = 'en';
+let currentTheme = 'light';
 
-// 更新页面所有带 data-i18n 的文本
 function updatePageText(lang) {
     const elements = document.querySelectorAll('[data-i18n]');
     elements.forEach(el => {
@@ -50,7 +49,6 @@ function updatePageText(lang) {
     });
 }
 
-// ---------- Giscus 评论组件加载 ----------
 function loadGiscus(lang) {
     const container = document.getElementById('giscus-container');
     if (!container) return;
@@ -79,14 +77,12 @@ function loadGiscus(lang) {
     container.appendChild(script);
 }
 
-// 动态更新 Giscus 主题（不重新加载）
 function updateGiscusTheme(isDark) {
     const theme = isDark ? 'dark_dimmed' : 'light_tritanopia';
     const iframe = document.querySelector('iframe.giscus-frame');
     if (iframe && iframe.contentWindow) {
         iframe.contentWindow.postMessage({ giscus: { setConfig: { theme } } }, 'https://giscus.app');
     } else {
-        // 等待 iframe 加载完成
         const observer = new MutationObserver((_, obs) => {
             const frame = document.querySelector('iframe.giscus-frame');
             if (frame) {
@@ -101,7 +97,6 @@ function updateGiscusTheme(isDark) {
     }
 }
 
-// ---------- 深色模式 ----------
 function initDarkMode() {
     const stored = localStorage.getItem('theme');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -149,7 +144,6 @@ function toggleDarkMode() {
     }
 }
 
-// ---------- 语言切换 ----------
 function toggleLanguage() {
     const newLang = currentLang === 'en' ? 'zh' : 'en';
     currentLang = newLang;
@@ -169,7 +163,6 @@ function initLanguage() {
     loadGiscus(currentLang);
 }
 
-// ---------- 绑定事件 (同时绑定桌面端和移动端按钮) ----------
 function bindEvents() {
     const darkBtns = ['darkModeToggle', 'mobileDarkToggle'];
     darkBtns.forEach(id => {
@@ -184,7 +177,6 @@ function bindEvents() {
     });
 }
 
-// ---------- 启动 ----------
 function init() {
     initDarkMode();
     initLanguage();
