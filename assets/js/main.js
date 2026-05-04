@@ -21,7 +21,7 @@ const translations = {
         nav_explore: "探索",
         nav_guestbook: "留言板",
         nav_about: "关于",
-        title: "浮光留言本",
+        title: "留言本",
         subtitle: "留下足迹 · 基于 GitHub 讨论",
         copyright: "© 2025 留言本"
     }
