@@ -4,373 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>浮光留言本 · 动态背景</title>
-    <style>
-        /* ----------------------------------------------------------
-           GLOBAL VARIABLES & DARK MODE
-           全局变量与深色模式定义
-        ---------------------------------------------------------- */
-        :root {
-            /* 亮色主题变量 */
-            --bg-gradient-start: #f4f7ff;
-            --bg-gradient-end: #e9eefc;
-            --card-bg: rgba(255, 255, 255, 0.92);
-            --card-blur: blur(16px);
-            --text-primary: #1e293b;
-            --text-secondary: #4a5a8a;
-            --navbar-bg: rgba(255, 255, 255, 0.75);
-            --navbar-border: rgba(255, 255, 255, 0.6);
-            --link-color: #2d3a6e;
-            --link-hover: #4f46e5;
-            --footer-bg: rgba(255, 255, 255, 0.5);
-            --circle-base: rgba(141, 163, 253, 0.6);
-            --transition: background 0.3s ease, color 0.2s ease, border-color 0.2s;
-        }
-
-        body.dark {
-            /* 深色主题变量 */
-            --bg-gradient-start: #0f172a;
-            --bg-gradient-end: #1e293b;
-            --card-bg: rgba(15, 23, 42, 0.92);
-            --card-blur: blur(16px);
-            --text-primary: #e2e8f0;
-            --text-secondary: #94a3b8;
-            --navbar-bg: rgba(15, 23, 42, 0.8);
-            --navbar-border: rgba(51, 65, 85, 0.6);
-            --link-color: #cbd5e1;
-            --link-hover: #818cf8;
-            --footer-bg: rgba(15, 23, 42, 0.6);
-            --circle-base: rgba(99, 102, 241, 0.5);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: linear-gradient(145deg, var(--bg-gradient-start), var(--bg-gradient-end));
-            min-height: 100vh;
-            color: var(--text-primary);
-            overflow-x: hidden;
-            transition: var(--transition);
-        }
-
-        /* ========= 动态圆形背景 (复刻 whoisw.com 动画) ========= */
-        .circles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            margin: 0;
-            padding: 0;
-            z-index: 0;
-            pointer-events: none;  /* 让圆点不干扰点击交互 */
-        }
-
-        .circles li {
-            position: absolute;
-            display: block;
-            list-style: none;
-            width: 20px;
-            height: 20px;
-            background: var(--circle-base);
-            bottom: -150px;
-            animation: animate 25s linear infinite;
-            will-change: transform, opacity;
-            border-radius: 6px;
-            transition: background 0.2s;
-        }
-
-        /* 每个圆形独立的位置、大小、延迟、时长 —— 源自原版设计 */
-        .circles li:nth-child(1) { left: 25%; width: 80px; height: 80px; animation-delay: 0s; background: rgba(141, 163, 253, 0.35); }
-        .circles li:nth-child(2) { left: 10%; width: 20px; height: 20px; animation-delay: 2s; animation-duration: 12s; background: rgba(110, 135, 230, 0.55); }
-        .circles li:nth-child(3) { left: 70%; width: 20px; height: 20px; animation-delay: 4s; background: rgba(200, 215, 255, 0.7); }
-        .circles li:nth-child(4) { left: 40%; width: 60px; height: 60px; animation-delay: 0s; animation-duration: 18s; background: rgba(100, 120, 220, 0.4); }
-        .circles li:nth-child(5) { left: 65%; width: 20px; height: 20px; animation-delay: 0s; background: rgba(255, 255, 245, 0.5); }
-        .circles li:nth-child(6) { left: 75%; width: 110px; height: 110px; animation-delay: 3s; background: rgba(141, 163, 253, 0.25); }
-        .circles li:nth-child(7) { left: 35%; width: 150px; height: 150px; animation-delay: 7s; background: rgba(180, 200, 255, 0.2); }
-        .circles li:nth-child(8) { left: 50%; width: 25px; height: 25px; animation-delay: 15s; animation-duration: 45s; background: rgba(80, 100, 210, 0.5); }
-        .circles li:nth-child(9) { left: 20%; width: 15px; height: 15px; animation-delay: 2s; animation-duration: 35s; background: rgba(210, 225, 255, 0.6); }
-        .circles li:nth-child(10) { left: 85%; width: 140px; height: 140px; animation-delay: 0s; animation-duration: 11s; background: rgba(120, 140, 245, 0.3); }
-        .circles li:nth-child(11) { left: 55%; width: 45px; height: 45px; animation-delay: 8s; animation-duration: 22s; background: rgba(150, 170, 255, 0.45); }
-        .circles li:nth-child(12) { left: 92%; width: 35px; height: 35px; animation-delay: 5s; animation-duration: 17s; background: rgba(90, 115, 235, 0.5); }
-        .circles li:nth-child(13) { left: 5%; width: 55px; height: 55px; animation-delay: 1s; animation-duration: 28s; background: rgba(200, 215, 250, 0.4); }
-        .circles li:nth-child(14) { left: 48%; width: 18px; height: 18px; animation-delay: 12s; animation-duration: 40s; background: rgba(130, 155, 250, 0.6); }
-
-        /* 深色模式下的圆形颜色调整 (更柔和) */
-        body.dark .circles li {
-            background: rgba(129, 140, 248, 0.4);
-        }
-        body.dark .circles li:nth-child(1) { background: rgba(99, 102, 241, 0.35); }
-        body.dark .circles li:nth-child(2) { background: rgba(129, 140, 248, 0.5); }
-        body.dark .circles li:nth-child(3) { background: rgba(167, 139, 250, 0.6); }
-        body.dark .circles li:nth-child(4) { background: rgba(139, 92, 246, 0.4); }
-        body.dark .circles li:nth-child(5) { background: rgba(192, 132, 252, 0.45); }
-        body.dark .circles li:nth-child(6) { background: rgba(99, 102, 241, 0.3); }
-        body.dark .circles li:nth-child(7) { background: rgba(129, 140, 248, 0.25); }
-        body.dark .circles li:nth-child(8) { background: rgba(167, 139, 250, 0.4); }
-        body.dark .circles li:nth-child(9) { background: rgba(139, 92, 246, 0.5); }
-        body.dark .circles li:nth-child(10) { background: rgba(99, 102, 241, 0.3); }
-        body.dark .circles li:nth-child(11) { background: rgba(167, 139, 250, 0.5); }
-        body.dark .circles li:nth-child(12) { background: rgba(129, 140, 248, 0.45); }
-        body.dark .circles li:nth-child(13) { background: rgba(139, 92, 246, 0.4); }
-        body.dark .circles li:nth-child(14) { background: rgba(99, 102, 241, 0.55); }
-
-        @keyframes animate {
-            0% {
-                transform: translateY(0) rotate(0deg);
-                opacity: 1;
-                border-radius: 8px;
-            }
-            100% {
-                transform: translateY(-1200px) rotate(720deg);
-                opacity: 0;
-                border-radius: 50%;
-            }
-        }
-
-        /* ========= 导航栏 (毛玻璃效果) ========= */
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 20;
-            background: var(--navbar-bg);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--navbar-border);
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.02);
-            padding: 0.8rem 2rem;
-            transition: var(--transition);
-        }
-
-        .nav-container {
-            max-width: 1280px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-        }
-
-        /* Logo / 站点名称 (可自定义) */
-        .logo-area {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 700;
-            font-size: 1.5rem;
-            letter-spacing: -0.5px;
-            background: linear-gradient(135deg, #2c3e9e, #6b46c0);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-        }
-        body.dark .logo-area {
-            background: linear-gradient(135deg, #a5b4fc, #c084fc);
-            background-clip: text;
-            -webkit-background-clip: text;
-        }
-        .logo-area i {
-            font-size: 1.7rem;
-            background: none;
-            color: #4f46e5;
-        }
-        body.dark .logo-area i {
-            color: #818cf8;
-        }
-
-        /* 导航链接容器 */
-        .nav-links {
-            display: flex;
-            gap: 1.8rem;
-            list-style: none;
-            align-items: center;
-        }
-        .nav-links a {
-            text-decoration: none;
-            font-weight: 500;
-            color: var(--link-color);
-            transition: 0.2s;
-            font-size: 1rem;
-            padding: 0.3rem 0;
-            border-bottom: 2px solid transparent;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .nav-links a:hover {
-            color: var(--link-hover);
-            border-bottom-color: var(--link-hover);
-        }
-
-        /* 图标按钮通用样式 (深色/语言切换) 只显示图标无文字 */
-        .icon-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 1.3rem;
-            padding: 0.2rem 0.5rem;
-            border-radius: 40px;
-            color: var(--link-color);
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .icon-btn:hover {
-            color: var(--link-hover);
-            background: rgba(128, 128, 128, 0.1);
-        }
-
-        /* ========= 页面布局：保证页脚永远固定在底部 ========= */
-        .page-wrapper {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        .main-content {
-            flex: 1;
-            position: relative;
-            z-index: 2;
-            max-width: 1100px;
-            margin: 6rem auto 2rem auto;
-            padding: 0 1.5rem;
-            width: 100%;
-        }
-
-        /* 留言卡片 */
-        .guestbook-card {
-            background: var(--card-bg);
-            backdrop-filter: var(--card-blur);
-            border-radius: 2rem;
-            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.12);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            overflow: hidden;
-            padding: 2rem 2rem 2.5rem;
-            transition: var(--transition);
-        }
-
-        .guestbook-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-        .guestbook-header h1 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            background: linear-gradient(145deg, #1e2a6e, #5b3b9c);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-            margin-bottom: 0.5rem;
-        }
-        body.dark .guestbook-header h1 {
-            background: linear-gradient(145deg, #a5b4fc, #c084fc);
-            background-clip: text;
-            -webkit-background-clip: text;
-        }
-        .guestbook-header p {
-            color: var(--text-secondary);
-            font-size: 1rem;
-            border-top: 1px dashed #cddcff;
-            display: inline-block;
-            padding-top: 0.5rem;
-        }
-
-        /* Giscus 评论容器 */
-        .giscus-container {
-            width: 100%;
-            margin-top: 1rem;
-            min-height: 400px;
-        }
-
-        /* 页脚 (固定在底部) */
-        .footer {
-            text-align: center;
-            padding: 1.5rem 1rem;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            background: var(--footer-bg);
-            backdrop-filter: blur(5px);
-            border-radius: 40px 40px 0 0;
-            width: 100%;
-            margin-top: 2rem;
-            transition: var(--transition);
-            border-top: 1px solid var(--navbar-border);
-        }
-        .footer-content {
-            max-width: 1100px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-        .footer a {
-            color: var(--link-hover);
-            text-decoration: none;
-            font-weight: 500;
-        }
-        .footer a:hover {
-            text-decoration: underline;
-        }
-        .email-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.3rem;
-        }
-
-        /* ----------------------------------------------------------
-           响应式布局：移动端优化
-           1. 导航栏变窄（padding减小）
-           2. 导航链接隐藏文字，只显示图标
-           3. 页脚内边距减小
-        ---------------------------------------------------------- */
-        @media (max-width: 720px) {
-            .navbar {
-                padding: 0.4rem 1rem;   /* 顶部导航栏更窄 */
-            }
-            .logo-area {
-                font-size: 1.2rem;       /* Logo 字体缩小 */
-            }
-            .logo-area i {
-                font-size: 1.3rem;
-            }
-            /* 隐藏导航链接中的文字部分，仅保留图标 */
-            .nav-links a {
-                font-size: 0;            /* 隐藏文字 */
-                gap: 0;
-            }
-            .nav-links a i {
-                font-size: 1.2rem;       /* 图标正常显示 */
-                margin: 0;
-            }
-            /* 调整导航链接之间的间距，更紧凑 */
-            .nav-links {
-                gap: 0.8rem;
-            }
-            /* 页脚更窄，内边距减小 */
-            .footer {
-                padding: 0.8rem 1rem;
-            }
-            .footer-content {
-                gap: 0.6rem;
-                font-size: 0.75rem;
-            }
-        }
-    </style>
-    <!-- Font Awesome 6 免费图标库 -->
+    <!-- 外部 CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- Font Awesome 6 图标库 (可替换为本地资源) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
 <div class="page-wrapper">
-    <!-- 动态背景圆阵 (共14个圆) -->
+    <!-- 动态圆形背景 (纯CSS动画) -->
     <ul class="circles">
         <li></li><li></li><li></li><li></li><li></li>
         <li></li><li></li><li></li><li></li><li></li>
@@ -380,19 +21,27 @@
     <!-- 导航栏 -->
     <div class="navbar">
         <div class="nav-container">
+            <!-- 左侧：移动端显示切换按钮组 (桌面端隐藏) -->
+            <div class="mobile-actions" id="mobileActions">
+                <button id="mobileDarkToggle" class="icon-btn" aria-label="Dark mode toggle"><i class="fas fa-moon"></i></button>
+                <button id="mobileLangToggle" class="icon-btn" aria-label="Language toggle"><i class="fas fa-globe"></i></button>
+            </div>
+
+            <!-- Logo 区域 -->
             <div class="logo-area">
                 <i class="fas fa-feather-alt"></i>
                 <span data-i18n="site_name">Guestbook</span>
             </div>
+
+            <!-- 右侧导航链接 (包含两个切换按钮的桌面版，移动端会隐藏) -->
             <ul class="nav-links">
                 <li><a href="#" data-i18n="nav_home"><i class="fas fa-home"></i> Home</a></li>
                 <li><a href="#" data-i18n="nav_explore"><i class="fas fa-compass"></i> Explore</a></li>
                 <li><a href="#" data-i18n="nav_guestbook" style="border-bottom-color:var(--link-hover);"><i class="fas fa-book-open"></i> Guestbook</a></li>
                 <li><a href="#" data-i18n="nav_about"><i class="fas fa-user"></i> About</a></li>
-                <!-- 深色模式切换按钮 (仅图标) -->
-                <li><button id="darkModeToggle" class="icon-btn" aria-label="Dark mode toggle"><i class="fas fa-moon"></i></button></li>
-                <!-- 中英文切换按钮 (仅图标) -->
-                <li><button id="langToggle" class="icon-btn" aria-label="Language toggle"><i class="fas fa-globe"></i></button></li>
+                <!-- 桌面版切换按钮 (移动端会隐藏) -->
+                <li class="desktop-only"><button id="darkModeToggle" class="icon-btn"><i class="fas fa-moon"></i></button></li>
+                <li class="desktop-only"><button id="langToggle" class="icon-btn"><i class="fas fa-globe"></i></button></li>
             </ul>
         </div>
     </div>
@@ -404,224 +53,24 @@
                 <h1><i class="fas fa-pen-fancy"></i> <span data-i18n="title">Floating Guestbook</span></h1>
                 <p><span data-i18n="subtitle">Leave your footprint · Powered by GitHub Discussions</span></p>
             </div>
-            <!-- Giscus 评论组件会动态加载到此容器 -->
             <div id="giscus-container" class="giscus-container"></div>
         </div>
     </div>
 
-    <!-- 页脚 (含版权与邮箱) -->
+    <!-- 页脚 (邮箱已按您的要求修改) -->
     <div class="footer">
         <div class="footer-content">
             <span data-i18n="copyright">© 2025 Floating Guestbook</span>
             <span class="email-link">
                 <i class="fas fa-envelope"></i>
-                <a href="mailto:hello@guestbook.dev">hello@guestbook.dev</a>
+                <a href="mailto:hello@domainname.plus">Hello#DomainName.Plus</a>
             </span>
             <span data-i18n="powered">Powered by <a href="https://giscus.app" target="_blank">Giscus</a></span>
         </div>
     </div>
 </div>
 
-<script>
-    /* ---------------------------------------------------------------
-       多语言配置 (默认英文，支持中文)
-       所有需要国际化的文本都存放在这里，方便后期修改
-    --------------------------------------------------------------- */
-    const translations = {
-        en: {
-            site_name: "Guestbook",
-            nav_home: "Home",
-            nav_explore: "Explore",
-            nav_guestbook: "Guestbook",
-            nav_about: "About",
-            title: "Floating Guestbook",
-            subtitle: "Leave your footprint · Powered by GitHub Discussions",
-            copyright: "© 2025 Floating Guestbook"
-        },
-        zh: {
-            site_name: "留言本",
-            nav_home: "首页",
-            nav_explore: "探索",
-            nav_guestbook: "留言板",
-            nav_about: "关于",
-            title: "浮光留言本",
-            subtitle: "留下足迹 · 基于 GitHub 讨论",
-            copyright: "© 2025 浮光留言本"
-        }
-    };
-
-    let currentLang = 'en';      // 当前语言: 'en' 或 'zh'
-    let currentTheme = 'light';   // 当前主题: 'light' 或 'dark'
-
-    // 获取页面中所有带 data-i18n 属性的元素，更新文本
-    function updatePageText(lang) {
-        const i18nElements = document.querySelectorAll('[data-i18n]');
-        i18nElements.forEach(el => {
-            const key = el.getAttribute('data-i18n');
-            if (translations[lang] && translations[lang][key]) {
-                // 保留子元素（如图标），仅更新文本内容
-                // 如果包含 <i> 图标且后面有文本节点则替换文本节点
-                if (el.children.length > 0) {
-                    let lastNode = el.lastChild;
-                    if (lastNode && lastNode.nodeType === Node.TEXT_NODE) {
-                        lastNode.textContent = translations[lang][key];
-                    } else {
-                        el.appendChild(document.createTextNode(translations[lang][key]));
-                    }
-                } else {
-                    el.textContent = translations[lang][key];
-                }
-            }
-        });
-    }
-
-    /* ---------------------------------------------------------------
-       Giscus 加载与语言切换
-       由于 Giscus 的 data-lang 属性不能动态修改，需要重新创建 script
-    --------------------------------------------------------------- */
-    let giscusLoaded = false;
-    let giscusScriptElem = null;
-
-    function loadGiscus(lang) {
-        const container = document.getElementById('giscus-container');
-        if (!container) return;
-        container.innerHTML = '';
-        
-        const giscusLang = lang === 'zh' ? 'zh-CN' : 'en';
-        const isDark = document.body.classList.contains('dark');
-        const giscusTheme = isDark ? 'dark_dimmed' : 'light_tritanopia';
-        
-        const script = document.createElement('script');
-        script.src = 'https://giscus.app/client.js';
-        script.setAttribute('data-repo', 'WorkSpacesPro/guestbook');
-        script.setAttribute('data-repo-id', 'R_kgDOOEORuw');
-        script.setAttribute('data-category', 'General');
-        script.setAttribute('data-category-id', 'DIC_kwDOOEORu84Cp384');
-        script.setAttribute('data-mapping', 'pathname');
-        script.setAttribute('data-strict', '0');
-        script.setAttribute('data-reactions-enabled', '1');
-        script.setAttribute('data-emit-metadata', '0');
-        script.setAttribute('data-input-position', 'bottom');
-        script.setAttribute('data-theme', giscusTheme);
-        script.setAttribute('data-lang', giscusLang);
-        script.setAttribute('crossorigin', 'anonymous');
-        script.async = true;
-        
-        container.appendChild(script);
-        giscusScriptElem = script;
-    }
-    
-    // 当深色模式切换时，更新 Giscus 主题
-    function updateGiscusTheme(isDark) {
-        const themeToSet = isDark ? 'dark_dimmed' : 'light_tritanopia';
-        const iframe = document.querySelector('iframe.giscus-frame');
-        if (iframe && iframe.contentWindow) {
-            iframe.contentWindow.postMessage({
-                giscus: { setConfig: { theme: themeToSet } }
-            }, 'https://giscus.app');
-        } else {
-            const observer = new MutationObserver((mutations, obs) => {
-                const frame = document.querySelector('iframe.giscus-frame');
-                if (frame) {
-                    frame.addEventListener('load', () => {
-                        frame.contentWindow.postMessage({
-                            giscus: { setConfig: { theme: themeToSet } }
-                        }, 'https://giscus.app');
-                    });
-                    obs.disconnect();
-                }
-            });
-            observer.observe(document.body, { childList: true, subtree: true });
-            setTimeout(() => observer.disconnect(), 10000);
-        }
-    }
-
-    /* ---------------------------------------------------------------
-       深色模式切换 (仅图标)
-    --------------------------------------------------------------- */
-    function initDarkMode() {
-        const storedTheme = localStorage.getItem('theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const isDark = storedTheme === 'dark' || (storedTheme !== 'light' && prefersDark);
-        
-        if (isDark) {
-            document.body.classList.add('dark');
-            currentTheme = 'dark';
-        } else {
-            document.body.classList.remove('dark');
-            currentTheme = 'light';
-        }
-        updateDarkModeIcon(isDark);
-        
-        if (document.querySelector('iframe.giscus-frame')) {
-            updateGiscusTheme(isDark);
-        }
-    }
-    
-    function updateDarkModeIcon(isDark) {
-        const toggleBtn = document.getElementById('darkModeToggle');
-        if (!toggleBtn) return;
-        if (isDark) {
-            toggleBtn.innerHTML = '<i class="fas fa-sun"></i>';
-        } else {
-            toggleBtn.innerHTML = '<i class="fas fa-moon"></i>';
-        }
-    }
-    
-    function toggleDarkMode() {
-        const isCurrentlyDark = document.body.classList.contains('dark');
-        if (isCurrentlyDark) {
-            document.body.classList.remove('dark');
-            localStorage.setItem('theme', 'light');
-            currentTheme = 'light';
-            updateDarkModeIcon(false);
-            updateGiscusTheme(false);
-        } else {
-            document.body.classList.add('dark');
-            localStorage.setItem('theme', 'dark');
-            currentTheme = 'dark';
-            updateDarkModeIcon(true);
-            updateGiscusTheme(true);
-        }
-    }
-    
-    /* ---------------------------------------------------------------
-       语言切换
-    --------------------------------------------------------------- */
-    function toggleLanguage() {
-        const newLang = currentLang === 'en' ? 'zh' : 'en';
-        currentLang = newLang;
-        updatePageText(currentLang);
-        loadGiscus(currentLang);
-        localStorage.setItem('lang', currentLang);
-    }
-    
-    function initLanguage() {
-        const savedLang = localStorage.getItem('lang');
-        if (savedLang === 'zh' || savedLang === 'en') {
-            currentLang = savedLang;
-        } else {
-            currentLang = 'en';
-        }
-        updatePageText(currentLang);
-        loadGiscus(currentLang);
-    }
-    
-    function bindEvents() {
-        const darkBtn = document.getElementById('darkModeToggle');
-        if (darkBtn) darkBtn.addEventListener('click', toggleDarkMode);
-        
-        const langBtn = document.getElementById('langToggle');
-        if (langBtn) langBtn.addEventListener('click', toggleLanguage);
-    }
-    
-    function init() {
-        initDarkMode();
-        initLanguage();
-        bindEvents();
-    }
-    
-    init();
-</script>
+<!-- 外部 JavaScript -->
+<script src="assets/js/main.js"></script>
 </body>
 </html>
