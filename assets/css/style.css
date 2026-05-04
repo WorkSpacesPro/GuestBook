@@ -144,7 +144,6 @@ body.dark .circles li:nth-child(14) { background: rgba(99, 102, 241, 0.55); }
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    position: relative;
 }
 
 .logo-area {
@@ -173,12 +172,10 @@ body.dark .logo-area i {
     color: #818cf8;
 }
 
-/* 桌面端默认显示，移动端隐藏 */
+/* 桌面端/移动端显示控制 */
 .desktop-only {
     display: list-item;
 }
-
-/* 移动端按钮默认隐藏 */
 .mobile-only {
     display: none;
 }
@@ -186,8 +183,11 @@ body.dark .logo-area i {
 .nav-links {
     display: flex;
     gap: 1.8rem;
-    list-style: none;
+    list-style: none;          /* 移除列表默认圆点 */
     align-items: center;
+}
+.nav-links li {
+    list-style: none;          /* 确保每个 li 也无圆点 */
 }
 .nav-links a {
     text-decoration: none;
@@ -206,18 +206,21 @@ body.dark .logo-area i {
     border-bottom-color: var(--link-hover);
 }
 
+/* 图标按钮固定宽度防止移位 */
 .icon-btn {
     background: none;
     border: none;
     cursor: pointer;
     font-size: 1.3rem;
-    padding: 0.2rem 0.5rem;
+    width: 2.2rem;            /* 固定宽度 */
+    padding: 0.2rem 0;
     border-radius: 40px;
     color: var(--link-color);
     transition: all 0.2s;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;           /* 防止在 flex 容器中被压缩 */
 }
 .icon-btn:hover {
     color: var(--link-hover);
@@ -322,17 +325,16 @@ body.dark .guestbook-header h1 {
 
 /* ----------------------------------------------------------
    响应式布局：移动端优化
-   按钮移至最右侧（通过 .nav-links 自然排列）
+   确保文字隐藏，按钮固定，导航无移位
 ---------------------------------------------------------- */
 @media (max-width: 720px) {
     .navbar {
         padding: 0.4rem 1rem;
     }
-    /* 桌面端按钮隐藏 */
+    /* 隐藏桌面端按钮，显示移动端按钮 */
     .desktop-only {
         display: none;
     }
-    /* 移动端按钮显示 */
     .mobile-only {
         display: list-item;
     }
@@ -342,9 +344,9 @@ body.dark .guestbook-header h1 {
     .logo-area i {
         font-size: 1.3rem;
     }
-    /* 隐藏导航链接中的文字，仅保留图标 */
+    /* 关键修复：强制隐藏导航链接中的文字（只留图标） */
     .nav-links a {
-        font-size: 0;
+        font-size: 0 !important;      /* 确保文字隐藏，避免英文文本出现 */
         gap: 0;
     }
     .nav-links a i {
@@ -352,7 +354,11 @@ body.dark .guestbook-header h1 {
         margin: 0;
     }
     .nav-links {
-        gap: 0.8rem;
+        gap: 0.5rem;                  /* 稍微减小间距 */
+    }
+    /* 按钮固定宽度在移动端保持 */
+    .icon-btn {
+        width: 2rem;
     }
     .footer {
         padding: 0.8rem 1rem;
