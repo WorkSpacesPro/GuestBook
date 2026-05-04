@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>动态留言本 | 灵感来自 whoisw.com</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 动态背景 -->
+    <ul class="circles">
+        <!-- 这里放置10个li元素，用于动画 -->
+    </ul>
+
+    <div class="container">
+        <h1>✨ 访客留言本</h1>
+        <p class="subtitle">留下你的足迹，分享你的想法</p>
+
+        <!-- 留言表单 -->
+        <form id="guestbook-form">
+            <input type="text" id="name" placeholder="你的名字" required>
+            <textarea id="message" rows="4" placeholder="你的留言..." required></textarea>
+            <button type="submit">💬 发布留言</button>
+        </form>
+
+        <!-- 留言板 -->
+        <div id="messages-container" class="messages-container">
+            <h2>📖 所有留言</h2>
+            <div id="messages-list" class="messages-list">
+                <!-- 留言将动态加载到这里 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Font Awesome 图标库 (用于图标) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="script.js"></script>
+</body>
+</html>
