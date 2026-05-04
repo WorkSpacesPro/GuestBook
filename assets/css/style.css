@@ -1,6 +1,5 @@
 /* ----------------------------------------------------------
    GLOBAL VARIABLES & DARK MODE
-   全局变量与深色模式定义
 ---------------------------------------------------------- */
 :root {
     --bg-gradient-start: #f4f7ff;
@@ -48,7 +47,7 @@ body {
     transition: var(--transition);
 }
 
-/* ========= 动态圆形背景 (纯CSS动画) ========= */
+/* ========= 动态圆形背景 ========= */
 .circles {
     position: fixed;
     top: 0;
@@ -76,7 +75,7 @@ body {
     transition: background 0.2s;
 }
 
-/* 圆形各自独立参数 */
+/* 圆形独立参数 */
 .circles li:nth-child(1) { left: 25%; width: 80px; height: 80px; animation-delay: 0s; background: rgba(141, 163, 253, 0.35); }
 .circles li:nth-child(2) { left: 10%; width: 20px; height: 20px; animation-delay: 2s; animation-duration: 12s; background: rgba(110, 135, 230, 0.55); }
 .circles li:nth-child(3) { left: 70%; width: 20px; height: 20px; animation-delay: 4s; background: rgba(200, 215, 255, 0.7); }
@@ -148,7 +147,6 @@ body.dark .circles li:nth-child(14) { background: rgba(99, 102, 241, 0.55); }
     position: relative;
 }
 
-/* Logo 区域 */
 .logo-area {
     display: flex;
     align-items: center;
@@ -175,19 +173,16 @@ body.dark .logo-area i {
     color: #818cf8;
 }
 
-/* 移动端专用按钮组 (默认隐藏) */
-.mobile-actions {
-    display: none;
-    gap: 0.5rem;
-    align-items: center;
-}
-
-/* 桌面端按钮容器 */
+/* 桌面端默认显示，移动端隐藏 */
 .desktop-only {
     display: list-item;
 }
 
-/* 导航链接样式 */
+/* 移动端按钮默认隐藏 */
+.mobile-only {
+    display: none;
+}
+
 .nav-links {
     display: flex;
     gap: 1.8rem;
@@ -327,19 +322,19 @@ body.dark .guestbook-header h1 {
 
 /* ----------------------------------------------------------
    响应式布局：移动端优化
-   1. 导航栏变窄
-   2. 显示左侧移动端按钮组，隐藏桌面版的两个按钮
-   3. 导航链接隐藏文字只留图标
+   按钮移至最右侧（通过 .nav-links 自然排列）
 ---------------------------------------------------------- */
 @media (max-width: 720px) {
     .navbar {
         padding: 0.4rem 1rem;
     }
-    .mobile-actions {
-        display: flex;
-    }
+    /* 桌面端按钮隐藏 */
     .desktop-only {
         display: none;
+    }
+    /* 移动端按钮显示 */
+    .mobile-only {
+        display: list-item;
     }
     .logo-area {
         font-size: 1.2rem;
